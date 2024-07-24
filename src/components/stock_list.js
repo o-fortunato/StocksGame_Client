@@ -7,14 +7,14 @@ const StockList = ({ stocks, onTransaction }) => {
       <table className="min-w-full bg-white">
         <thead>
           <tr className="w-full bg-gray-100 border-b">
-            <th className="py-4 px-6 text-left">Symbol/Company</th>
-            <th className="py-4 px-6 text-left">Rank</th>
-            <th className="py-4 px-6 text-left">Price</th>
-            <th className="py-4 px-6 text-left">Price % Chg</th>
-            <th className="py-4 px-6 text-left">High</th>
-            <th className="py-4 px-6 text-left">Low</th>
-            <th className="py-4 px-6 text-left">Quantity Owned</th>
-            <th className="py-4 px-6 text-left">Actions</th>
+            <th className="py-4 px-8 text-left">Symbol/Company</th>
+            <th className="py-4 px-8 text-left">Rank</th>
+            <th className="py-4 px-8 text-left">Price</th>
+            <th className="py-4 px-8 text-left">Price % Chg</th>
+            <th className="py-4 px-8 text-left">High</th>
+            <th className="py-4 px-8 text-left">Low</th>
+            <th className="py-4 px-8 text-left">Quantity Owned</th>
+            <th className="py-4 px-8 text-left">Actions</th>
           </tr>
         </thead>
         <tbody>

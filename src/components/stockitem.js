@@ -22,7 +22,7 @@ const StockItem = ({ stock, onTransaction }) => {
       <td className="py-4 px-6">${stock.high}</td>
       <td className="py-4 px-6">${stock.low}</td>
       <td className="py-4 px-6">{stock.quantity}</td>
-      <td className="py-4 px-6 flex space-x-2">
+      <td className="py-4 px-6 flex space-x-4">
         <input
           type="number"
           value={shares}
@@ -31,13 +31,13 @@ const StockItem = ({ stock, onTransaction }) => {
           className="border rounded p-2 w-16"
         />
         <button
-          className="bg-green-500 text-white p-2 rounded"
+          className="bg-black text-white p-2 rounded"
           onClick={handleBuy}
         >
           Buy
         </button>
         <button
-          className="bg-red-500 text-white p-2 rounded"
+          className="bg-black text-white p-2 rounded"
           onClick={handleSell}
         >
           Sell
