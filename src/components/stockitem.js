@@ -14,23 +14,24 @@ const StockItem = ({ stock, onTransaction }) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 m-2 border border-gray-200">
-      <h2 className="text-lg font-bold mb-2">{stock.name}</h2>
-      <p className="text-gray-600">Price: ${stock.price}</p>
-      <p className="text-gray-600">High: ${stock.high}</p>
-      <p className="text-gray-600">Low: ${stock.low}</p>
-      <p className={`text-sm ${stock.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>Change: {stock.change}%</p>
-      <p className="text-gray-600">Quantity Owned: {stock.quantity}</p>
-      <div className="flex mt-4">
+    <tr className="border-b">
+      <td className="py-4 px-6 text-blue-500 font-semibold">{stock.name}</td>
+      <td className="py-4 px-6">{stock.id}</td>
+      <td className="py-4 px-6">${stock.price}</td>
+      <td className={`py-4 px-6 ${stock.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>{stock.change}%</td>
+      <td className="py-4 px-6">${stock.high}</td>
+      <td className="py-4 px-6">${stock.low}</td>
+      <td className="py-4 px-6">{stock.quantity}</td>
+      <td className="py-4 px-6 flex space-x-2">
         <input
           type="number"
           value={shares}
           onChange={(e) => setShares(Number(e.target.value))}
           min="0"
-          className="border rounded p-2 flex-grow mr-2"
+          className="border rounded p-2 w-16"
         />
         <button
-          className="bg-green-500 text-white p-2 rounded mr-2"
+          className="bg-green-500 text-white p-2 rounded"
           onClick={handleBuy}
         >
           Buy
@@ -41,8 +42,8 @@ const StockItem = ({ stock, onTransaction }) => {
         >
           Sell
         </button>
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 };
 
