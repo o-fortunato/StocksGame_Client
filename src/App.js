@@ -41,9 +41,9 @@ function App() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Stock Trader</h1>
-      <div className="mb-4">
-        <button className="bg-blue-500 text-white p-2 rounded mr-2" onClick={() => handleSort('price')}>Sort by Price</button>
-        <button className="bg-blue-500 text-white p-2 rounded mr-2" onClick={() => handleSort('quantity')}>Sort by Quantity</button>
+      <div className="mb-4 flex justify-center space-x-4">
+        <button className="bg-blue-500 text-white p-2 rounded" onClick={() => handleSort('price')}>Sort by Price</button>
+        <button className="bg-blue-500 text-white p-2 rounded" onClick={() => handleSort('quantity')}>Sort by Quantity</button>
         <button className="bg-blue-500 text-white p-2 rounded" onClick={() => handleSort('change')}>Sort by Change</button>
       </div>
       <StockList stocks={stocks} onTransaction={handleTransaction} />

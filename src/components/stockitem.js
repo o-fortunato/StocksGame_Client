@@ -14,13 +14,13 @@ const StockItem = ({ stock, onTransaction }) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 m-2">
-      <h2 className="text-lg font-bold">{stock.name}</h2>
-      <p>Price: ${stock.price}</p>
-      <p>High: ${stock.high}</p>
-      <p>Low: ${stock.low}</p>
-      <p>Change: {stock.change}%</p>
-      <p>Quantity Owned: {stock.quantity}</p>
+    <div className="bg-white shadow-md rounded-lg p-4 m-2 border border-gray-200">
+      <h2 className="text-lg font-bold mb-2">{stock.name}</h2>
+      <p className="text-gray-600">Price: ${stock.price}</p>
+      <p className="text-gray-600">High: ${stock.high}</p>
+      <p className="text-gray-600">Low: ${stock.low}</p>
+      <p className={`text-sm ${stock.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>Change: {stock.change}%</p>
+      <p className="text-gray-600">Quantity Owned: {stock.quantity}</p>
       <div className="flex mt-4">
         <input
           type="number"
