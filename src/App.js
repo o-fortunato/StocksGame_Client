@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StockList from './components/stock_list';
 import ChatWindow from './components/chat';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.css'; // Import Tailwind CSS for additional custom styles
+import './index.css';
+import SummaryCard from "./components/summarycard"; // Import Tailwind CSS for additional custom styles
 
 const initialStocks = [
   { id: 1, name: 'AAPL', price: 150, high: 155, low: 145, change: 1.5, quantity: 10 },
@@ -15,11 +16,19 @@ const initialStocks = [
   { id: 8, name: 'NVDA', price: 220, high: 230, low: 210, change: 3.0, quantity: 15 },
   { id: 9, name: 'DIS', price: 180, high: 185, low: 175, change: 0.4, quantity: 9 },
   { id: 10, name: 'PYPL', price: 270, high: 275, low: 265, change: -0.9, quantity: 12 }
-    
 ];
 
 function App() {
   const [stocks, setStocks] = useState(initialStocks);
+  const [currentBalance, setCurrentBalance] = useState(10000); // Starting balance
+  const [previousTotalValue, setPreviousTotalValue] = useState(0);
+  const [currentTotalValue, setCurrentTotalValue] = useState(0);
+
+  useEffect(() => {
+    const totalValue = stocks.reduce((acc, stock) => acc + stock.price * stock.quantity, 0);
+    setPreviousTotalValue(currentTotalValue);
+    setCurrentTotalValue(totalValue);
+  }, [stocks]);
 
   const handleTransaction = (id, shares, type) => {
     setStocks(prevStocks =>
@@ -45,15 +54,26 @@ function App() {
     setStocks(sortedStocks);
   };
 
+  const growth = ((currentTotalValue - previousTotalValue) / (previousTotalValue || 1)) * 100;
+
   return (
       <div className="container-fluid vh-100 d-flex flex-column">
-        <div className="row flex-grow-1">
+        <div className="row flex-grow-1 position-relative">
           <div className="col-md-9 p-4 overflow-auto">
             <h1 className="text-2xl font-bold mb-4">Stock Trader</h1>
             <StockList stocks={stocks} onTransaction={handleTransaction} onSort={handleSort} />
           </div>
-          <div className="col-md-3 p-4 border-start">
-            <ChatWindow />
+          <div className="col-md-3 p-4 border-start d-flex flex-column">
+            <div className="flex-grow-1 position-relative">
+              <ChatWindow />
+              <div className="position-absolute top-0 end-0 p-4">
+                <SummaryCard
+                    currentBalance={currentBalance}
+                    currentTotalValue={currentTotalValue}
+                    growth={growth}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
