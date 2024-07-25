@@ -9,9 +9,6 @@ webSocket.addEventListener('open', (event) => {
 
 
 webSocket.addEventListener('message', (event) => {
-    webSocket.send(
-        JSON.stringify(JSON.stringify(chatMessageDTO))
-    );
     console.log(`[WebSocket] Message received: ${event.data}`);
 });
 
