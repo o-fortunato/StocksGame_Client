@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import StockList from './components/stock_list';
 import ChatWindow from './components/chat';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.css';
+import './index.css'; // Ensure this includes Tailwind CSS imports if using PostCSS
 import SummaryCard from "./components/summarycard"; // Import Tailwind CSS for additional custom styles
 
 const initialStocks = [
@@ -58,21 +58,21 @@ function App() {
 
   return (
       <div className="container-fluid vh-100 d-flex flex-column">
-        <div className="row flex-grow-1 position-relative">
+        <div className="row flex-grow-1">
           <div className="col-md-9 p-4 overflow-auto">
             <h1 className="text-2xl font-bold mb-4">Stock Trader</h1>
             <StockList stocks={stocks} onTransaction={handleTransaction} onSort={handleSort} />
           </div>
-          <div className="col-md-3 p-4 border-start d-flex flex-column">
-            <div className="flex-grow-1 position-relative">
+          <div className="col-md-3 d-flex flex-column">
+            <div className="flex-grow-1 overflow-hidden border rounded-lg shadow-lg mb-3" style={{ height: '50vh' }}>
               <ChatWindow />
-              <div className="position-absolute top-0 end-0 p-4">
-                <SummaryCard
-                    currentBalance={currentBalance}
-                    currentTotalValue={currentTotalValue}
-                    growth={growth}
-                />
-              </div>
+            </div>
+            <div className="position-relative">
+              <SummaryCard
+                  currentBalance={currentBalance}
+                  currentTotalValue={currentTotalValue}
+                  growth={growth}
+              />
             </div>
           </div>
         </div>
