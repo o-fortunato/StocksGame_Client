@@ -12,25 +12,22 @@ const ChatWindow = () => {
     };
 
     return (
-        <div className="flex flex-col h-full">
-            <div className="flex-1 overflow-y-auto mb-4">
+        <div className="d-flex flex-column h-100">
+            <div className="flex-grow-1 overflow-auto mb-3">
                 {messages.map((msg, index) => (
-                    <div key={index} className="bg-gray-200 p-2 rounded mb-2">
+                    <div key={index} className="mb-2 p-2 bg-light rounded">
                         {msg}
                     </div>
                 ))}
             </div>
-            <div className="flex">
+            <div className="input-group">
                 <input
                     type="text"
+                    className="form-control"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    className="border rounded p-2 flex-1"
                 />
-                <button
-                    onClick={handleSend}
-                    className="bg-black text-white p-2 rounded ml-2"
-                >
+                <button className="btn btn-primary" onClick={handleSend}>
                     Send
                 </button>
             </div>

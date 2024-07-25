@@ -14,32 +14,26 @@ const StockItem = ({ stock, onTransaction }) => {
     };
 
     return (
-        <tr className="border-b">
-            <td className="py-4 px-6 text-blue-500 font-semibold">{stock.name}</td>
-            <td className="py-4 px-6">{stock.id}</td>
-            <td className="py-4 px-6">${stock.price}</td>
-            <td className={`py-4 px-6 ${stock.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>{stock.change}%</td>
-            <td className="py-4 px-6">${stock.high}</td>
-            <td className="py-4 px-6">${stock.low}</td>
-            <td className="py-4 px-6">{stock.quantity}</td>
-            <td className="py-4 px-6 flex space-x-4">
+        <tr>
+            <td className="text-primary fw-bold">{stock.name}</td>
+            <td className="text-center">{stock.id}</td>
+            <td className="text-center">${stock.price}</td>
+            <td className={`text-center ${stock.change >= 0 ? 'text-success' : 'text-danger'}`}>{stock.change}%</td>
+            <td className="text-center">${stock.high}</td>
+            <td className="text-center">${stock.low}</td>
+            <td className="text-center">{stock.quantity}</td>
+            <td className="d-flex justify-content-center gap-2">
                 <input
                     type="number"
                     value={shares}
                     onChange={(e) => setShares(Number(e.target.value))}
                     min="0"
-                    className="border rounded p-2 w-16"
+                    className="form-control w-25"
                 />
-                <button
-                    className="bg-black text-white p-2 rounded"
-                    onClick={handleBuy}
-                >
+                <button className="btn btn-dark" onClick={handleBuy}>
                     Buy
                 </button>
-                <button
-                    className="bg-black text-white p-2 rounded"
-                    onClick={handleSell}
-                >
+                <button className="btn btn-dark" onClick={handleSell}>
                     Sell
                 </button>
             </td>
