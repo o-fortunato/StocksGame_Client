@@ -1,20 +1,15 @@
 import React from 'react';
 import StockItem from './stockitem';
 
-const StockList = ({ stocks, onTransaction }) => {
+const StockList = ({ stocks, onTransaction, headers }) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white">
         <thead>
           <tr className="w-full bg-gray-100 border-b">
-            <th className="py-4 px-8 text-left">Symbol/Company</th>
-            <th className="py-4 px-8 text-left">Rank</th>
-            <th className="py-4 px-8 text-left">Price</th>
-            <th className="py-4 px-8 text-left">Price % Chg</th>
-            <th className="py-4 px-8 text-left">High</th>
-            <th className="py-4 px-8 text-left">Low</th>
-            <th className="py-4 px-8 text-left">Quantity Owned</th>
-            <th className="py-4 px-8 text-left">Actions</th>
+            {headers.map((header, index) => (
+              <th key={index} className="py-4 px-80 text-left">{header}</th>
+            ))}
           </tr>
         </thead>
         <tbody>

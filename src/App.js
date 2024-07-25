@@ -15,6 +15,17 @@ const initialStocks = [
   { id: 10, name: 'PYPL', price: 270, high: 275, low: 265, change: -0.9, quantity: 12 }
 ];
 
+const headers = [
+  'Symbol/Company',
+  'Rank',
+  'Price',
+  'Price % Chg',
+  'High',
+  'Low',
+  'Quantity Owned',
+  'Actions'
+];
+
 function App() {
   const [stocks, setStocks] = useState(initialStocks);
 
@@ -46,7 +57,7 @@ function App() {
         <button className="bg-green-300 text-black p-2 rounded" onClick={() => handleSort('quantity')}>Sort by Quantity</button>
         <button className="bg-green-300 text-black p-2 rounded" onClick={() => handleSort('change')}>Sort by Change</button>
       </div>
-      <StockList stocks={stocks} onTransaction={handleTransaction} />
+      <StockList stocks={stocks} onTransaction={handleTransaction} headers={headers} />
     </div>
   );
 }
