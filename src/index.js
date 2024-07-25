@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import Chat from './components/chat'; // Import the Chat component
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';

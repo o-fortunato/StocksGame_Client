@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import StockList from './components/stock_list';
+import ChatWindow from './components/chat';
 import './index.css'; // Import Tailwind CSS
 
 const initialStocks = [
@@ -15,50 +16,43 @@ const initialStocks = [
   { id: 10, name: 'PYPL', price: 270, high: 275, low: 265, change: -0.9, quantity: 12 }
 ];
 
-const headers = [
-  'Symbol/Company',
-  'Rank',
-  'Price',
-  'Price % Chg',
-  'High',
-  'Low',
-  'Quantity Owned',
-  'Actions'
-];
-
 function App() {
   const [stocks, setStocks] = useState(initialStocks);
 
   const handleTransaction = (id, shares, type) => {
     setStocks(prevStocks =>
-      prevStocks.map(stock =>
-        stock.id === id
-        ? { ...stock, quantity: type === 'buy' ? stock.quantity + shares : stock.quantity - shares }
-        : stock
-      )
+        prevStocks.map(stock =>
+            stock.id === id
+                ? { ...stock, quantity: type === 'buy' ? stock.quantity + shares : stock.quantity - shares }
+                : stock
+        )
     );
   };
 
   const handleSort = (criteria) => {
     const sortedStocks = [...stocks].sort((a, b) => {
+      if (criteria === 'name') return a.name.localeCompare(b.name);
       if (criteria === 'price') return b.price - a.price;
       if (criteria === 'quantity') return b.quantity - a.quantity;
       if (criteria === 'change') return Math.abs(b.change) - Math.abs(a.change);
+      if (criteria === 'high') return b.high - a.high;
+      if (criteria === 'low') return b.low - a.low;
+      if (criteria === 'id') return a.id - b.id;
       return 0;
     });
     setStocks(sortedStocks);
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Stock Trader</h1>
-      <div className="mb-4 flex justify-center space-x-6">
-        <button className="bg-green-300 text-black p-2 rounded" onClick={() => handleSort('price')}>Sort by Price</button>
-        <button className="bg-green-300 text-black p-2 rounded" onClick={() => handleSort('quantity')}>Sort by Quantity</button>
-        <button className="bg-green-300 text-black p-2 rounded" onClick={() => handleSort('change')}>Sort by Change</button>
+      <div className="h-screen w-screen flex">
+        <div className="w-3/4 p-4 overflow-y-auto">
+          <h1 className="text-2xl font-bold mb-4">Stock Trader</h1>
+          <StockList stocks={stocks} onTransaction={handleTransaction} onSort={handleSort} />
+        </div>
+        <div className="w-1/4 p-4 border-l border-gray-300">
+          <ChatWindow />
+        </div>
       </div>
-      <StockList stocks={stocks} onTransaction={handleTransaction} headers={headers} />
-    </div>
   );
 }
 
