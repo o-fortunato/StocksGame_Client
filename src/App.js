@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import StockList from './components/stock_list';
 import './index.css'; // Import Tailwind CSS
+import './App_Login_Dashboard_WaitingRoom';
+import AppLogin from "./App_Login_Dashboard_WaitingRoom";
 
 const initialStocks = [
   { id: 1, name: 'AAPL', price: 150, high: 155, low: 145, change: 1.5, quantity: 10 },
@@ -28,6 +30,7 @@ const headers = [
 
 function App() {
   const [stocks, setStocks] = useState(initialStocks);
+  AppLogin();
 
   const handleTransaction = (id, shares, type) => {
     setStocks(prevStocks =>

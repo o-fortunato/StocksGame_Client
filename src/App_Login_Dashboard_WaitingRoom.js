@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Login from './components/Login';
-import Dashboard from './components/Dashboard';
-import WaitingRoom from './components/WaitingRoom';
+import Login from './login';
+import Dashboard from './Dashboard';
+import WaitingRoom from './WaitingRoom';
 
-const App = () => {
+const AppLogin = () => {
   const [player, setPlayer] = useState(null);
   const [gameStarted, setGameStarted] = useState(false);
 
@@ -30,4 +30,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default AppLogin;
