@@ -70,40 +70,10 @@ const styles = {
   },
 };
 
+export default Login;
 
 
-// Componente Dashboard
-const Dashboard = ({ player }) => {
-    return (
-      <div>
-        <h1>Welcome, {player.name}</h1>
-        <p>Your player ID is: {player.id}</p>
-        {/* You can add more components and functionality here */}
-      </div>
-    );
-};
 
-
-// Componente principal App
-const App = () => {
-    const [player, setPlayer] = useState(null);
-  
-    const handleLogin = (playerData) => {
-      setPlayer(playerData);
-    };
-  
-    return (
-      <div>
-        {player ? (
-          <Dashboard player={player} />
-        ) : (
-          <Login onLogin={handleLogin} />
-        )}
-      </div>
-    );
-};
-  
-export default App;
 
 
 
