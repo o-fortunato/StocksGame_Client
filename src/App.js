@@ -4,6 +4,7 @@ import ChatWindow from './components/chat';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'; // Ensure this includes Tailwind CSS imports if using PostCSS
 import SummaryCard from "./components/summarycard"; // Import Tailwind CSS for additional custom styles
+import * as WebSocketFunc from './webSocket';
 
 const initialStocks = [
   { id: 1, name: 'AAPL', price: 150, high: 155, low: 145, change: 1.5, quantity: 10 },
@@ -23,6 +24,29 @@ function App() {
   const [currentBalance, setCurrentBalance] = useState(10000); // Starting balance
   const [previousTotalValue, setPreviousTotalValue] = useState(0);
   const [currentTotalValue, setCurrentTotalValue] = useState(0);
+
+  WebSocketFunc.webSocket.addEventListener('open', (event) => {
+    console.log('[WebSocket] Connection established');
+    WebSocketFunc.webSocket.send(WebSocketFunc.Test_Send);
+  });
+
+
+  WebSocketFunc.webSocket.addEventListener('message', (event) => {
+    console.log(`[WebSocket] Message received: ${event.data}`);
+  });
+
+  WebSocketFunc.webSocket.addEventListener('close', (event) => {
+    if (event.wasClean) {
+      console.log(`[WebSocket] Connection closed cleanly, code=${event.code}, reason=${event.reason}`);
+    } else {
+      console.log('[WebSocket] Connection died');
+    }
+  });
+
+  WebSocketFunc.webSocket.addEventListener('error', (error) => {
+    console.error('[WebSocket] Error:', error);
+  });
+
 
   useEffect(() => {
     const totalValue = stocks.reduce((acc, stock) => acc + stock.price * stock.quantity, 0);

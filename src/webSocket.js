@@ -1,7 +1,7 @@
 /*import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {config} from "chai";*/
-const WebSocket = require('ws');
+//const WebSocket = require('ws');
 
 const webSocket = new WebSocket('ws://summercamp24.ddns.net:4000');
 
@@ -31,14 +31,14 @@ let StockDTO = {
 let ChatMessageDTO = {
     "senderId": "a6cd5f0d-a0bc-4ad2-82ad-1133b9ea7a44", //For now, change as needed
     "receiverId": "all",
-    "message": "Mekie maltinha"
+    "message": "oi"
 }
 //Use Test_Send to test data sent through Web Socket
 
 let Test_Send = JSON.stringify({
     //See PDF for list of events
-    "event": "connect-confirm",
-    "data": PlayerDTO,
+    "event": "send-message",
+    "data": ChatMessageDTO,
 })
 
 webSocket.addEventListener('open', (event) => {
@@ -62,3 +62,10 @@ webSocket.addEventListener('close', (event) => {
 webSocket.addEventListener('error', (error) => {
     console.error('[WebSocket] Error:', error);
 });
+
+module.exports.webSocket = webSocket;
+module.exports.TransactionDTO = TransactionDTO;
+module.exports.PlayerDTO = PlayerDTO;
+module.exports.StockDTO = StockDTO;
+module.exports.ChatMessageDTO = ChatMessageDTO;
+module.exports.Test_Send = Test_Send;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import * as WebSocketFunc from '../webSocket';
 
 const ChatWindow = () => {
     const [messages, setMessages] = useState([]);
@@ -8,6 +9,7 @@ const ChatWindow = () => {
         if (input.trim()) {
             setMessages([...messages, input]);
             setInput('');
+            WebSocketFunc.webSocket.send(WebSocketFunc.Test_Send)
         }
     };
 
