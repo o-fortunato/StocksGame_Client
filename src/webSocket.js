@@ -43,7 +43,7 @@ let Test_Send = JSON.stringify({
 
 webSocket.addEventListener('open', (event) => {
     console.log('[WebSocket] Connection established');
-    webSocket.send(Test_Send);
+    //webSocket.send(Test_Send);
 });
 
 
