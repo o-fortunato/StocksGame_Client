@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StockList from './components/stock_list';
-import './index.css'; // Import Tailwind CSS
+import ChatWindow from './components/chat';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css'; // Ensure this includes Tailwind CSS imports if using PostCSS
+import SummaryCard from "./components/summarycard"; // Import Tailwind CSS for additional custom styles
 
 const initialStocks = [
   { id: 1, name: 'AAPL', price: 150, high: 155, low: 145, change: 1.5, quantity: 10 },
@@ -15,50 +18,65 @@ const initialStocks = [
   { id: 10, name: 'PYPL', price: 270, high: 275, low: 265, change: -0.9, quantity: 12 }
 ];
 
-const headers = [
-  'Symbol/Company',
-  'Rank',
-  'Price',
-  'Price % Chg',
-  'High',
-  'Low',
-  'Quantity Owned',
-  'Actions'
-];
-
 function App() {
   const [stocks, setStocks] = useState(initialStocks);
+  const [currentBalance, setCurrentBalance] = useState(10000); // Starting balance
+  const [previousTotalValue, setPreviousTotalValue] = useState(0);
+  const [currentTotalValue, setCurrentTotalValue] = useState(0);
+
+  useEffect(() => {
+    const totalValue = stocks.reduce((acc, stock) => acc + stock.price * stock.quantity, 0);
+    setPreviousTotalValue(currentTotalValue);
+    setCurrentTotalValue(totalValue);
+  }, [stocks]);
 
   const handleTransaction = (id, shares, type) => {
     setStocks(prevStocks =>
-      prevStocks.map(stock =>
-        stock.id === id
-        ? { ...stock, quantity: type === 'buy' ? stock.quantity + shares : stock.quantity - shares }
-        : stock
-      )
+        prevStocks.map(stock =>
+            stock.id === id
+                ? { ...stock, quantity: type === 'buy' ? stock.quantity + shares : stock.quantity - shares }
+                : stock
+        )
     );
   };
 
   const handleSort = (criteria) => {
     const sortedStocks = [...stocks].sort((a, b) => {
+      if (criteria === 'name') return a.name.localeCompare(b.name);
       if (criteria === 'price') return b.price - a.price;
       if (criteria === 'quantity') return b.quantity - a.quantity;
       if (criteria === 'change') return Math.abs(b.change) - Math.abs(a.change);
+      if (criteria === 'high') return b.high - a.high;
+      if (criteria === 'low') return b.low - a.low;
+      if (criteria === 'id') return a.id - b.id;
       return 0;
     });
     setStocks(sortedStocks);
   };
 
+  const growth = ((currentTotalValue - previousTotalValue) / (previousTotalValue || 1)) * 100;
+
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Stock Trader</h1>
-      <div className="mb-4 flex justify-center space-x-6">
-        <button className="bg-green-300 text-black p-2 rounded" onClick={() => handleSort('price')}>Sort by Price</button>
-        <button className="bg-green-300 text-black p-2 rounded" onClick={() => handleSort('quantity')}>Sort by Quantity</button>
-        <button className="bg-green-300 text-black p-2 rounded" onClick={() => handleSort('change')}>Sort by Change</button>
+      <div className="container-fluid vh-100 d-flex flex-column">
+        <div className="row flex-grow-1">
+          <div className="col-md-9 p-4 overflow-auto">
+            <h1 className="text-2xl font-bold mb-4">Stock Trader</h1>
+            <StockList stocks={stocks} onTransaction={handleTransaction} onSort={handleSort} />
+          </div>
+          <div className="col-md-3 d-flex flex-column">
+            <div className="flex-grow-1 overflow-hidden border rounded-lg shadow-lg mb-3" style={{ height: '50vh' }}>
+              <ChatWindow />
+            </div>
+            <div className="position-relative">
+              <SummaryCard
+                  currentBalance={currentBalance}
+                  currentTotalValue={currentTotalValue}
+                  growth={growth}
+              />
+            </div>
+          </div>
+        </div>
       </div>
-      <StockList stocks={stocks} onTransaction={handleTransaction} headers={headers} />
-    </div>
   );
 }
 
