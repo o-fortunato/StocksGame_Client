@@ -1,43 +1,71 @@
 import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
 import StockList from './components/stock_list';
 import ChatWindow from './components/chat';
+import SummaryCard from "./components/summarycard";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'; // Ensure this includes Tailwind CSS imports if using PostCSS
-import SummaryCard from "./components/summarycard"; // Import Tailwind CSS for additional custom styles
 
-const initialStocks = [
-  { id: 1, name: 'AAPL', price: 150, high: 155, low: 145, change: 1.5, quantity: 10 },
-  { id: 2, name: 'GOOGL', price: 2800, high: 2825, low: 2780, change: -0.5, quantity: 5 },
-  { id: 3, name: 'AMZN', price: 3400, high: 3450, low: 3350, change: 2.3, quantity: 0 },
-  { id: 4, name: 'MSFT', price: 299, high: 305, low: 290, change: 1.0, quantity: 20 },
-  { id: 5, name: 'TSLA', price: 750, high: 765, low: 740, change: 0.7, quantity: 2 },
-  { id: 6, name: 'FB', price: 360, high: 370, low: 350, change: -1.2, quantity: 7 },
-  { id: 7, name: 'NFLX', price: 590, high: 600, low: 580, change: 1.8, quantity: 4 },
-  { id: 8, name: 'NVDA', price: 220, high: 230, low: 210, change: 3.0, quantity: 15 },
-  { id: 9, name: 'DIS', price: 180, high: 185, low: 175, change: 0.4, quantity: 9 },
-  { id: 10, name: 'PYPL', price: 270, high: 275, low: 265, change: -0.9, quantity: 12 }
-];
+const socket = io('http://localhost:4000'); // Replace with your server URL
 
-function StockGame({ player }) {
-  const [stocks, setStocks] = useState(initialStocks);
+const StockGame = ({ player }) => {
+  const [stocks, setStocks] = useState([]);
   const [currentBalance, setCurrentBalance] = useState(10000); // Starting balance
   const [previousTotalValue, setPreviousTotalValue] = useState(0);
   const [currentTotalValue, setCurrentTotalValue] = useState(0);
+  const [gameStarted, setGameStarted] = useState(false); // New state to track game start
 
   useEffect(() => {
-    const totalValue = stocks.reduce((acc, stock) => acc + stock.price * stock.quantity, 0);
-    setPreviousTotalValue(currentTotalValue);
-    setCurrentTotalValue(totalValue);
-  }, [stocks]);
+    socket.on('round-started', (stockDTOs) => {
+      setStocks(stockDTOs);
+      setGameStarted(true); // Update game started state
+    });
 
-  const handleTransaction = (id, shares, type) => {
-    setStocks(prevStocks =>
-      prevStocks.map(stock =>
-        stock.id === id
-          ? { ...stock, quantity: type === 'buy' ? stock.quantity + shares : stock.quantity - shares }
-          : stock
-      )
-    );
+    fetchWalletInfo(player.id);
+
+    return () => {
+      socket.off('round-started');
+    };
+  }, [player.id]);
+
+  const fetchWalletInfo = async (playerId) => {
+    try {
+      const response = await fetch(`http://localhost:4000/game/player/${playerId}/wallet`);
+      const data = await response.json();
+      setCurrentBalance(data.currentBalance);
+      setStocks(data.stocks);
+      const totalValue = data.stocks.reduce((acc, stock) => acc + stock.price * stock.quantity, 0);
+      setPreviousTotalValue(currentTotalValue);
+      setCurrentTotalValue(totalValue);
+    } catch (error) {
+      console.error('Error fetching wallet info:', error);
+    }
+  };
+
+  const handleTransaction = async (id, shares, type) => {
+    try {
+      const response = await fetch(`http://localhost:4000/game/transaction`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          playerId: player.id,
+          stockId: id,
+          shares: shares,
+          type: type
+        })
+      });
+
+      const data = await response.json();
+      setCurrentBalance(data.currentBalance);
+      setStocks(data.stocks);
+      const totalValue = data.stocks.reduce((acc, stock) => acc + stock.price * stock.quantity, 0);
+      setPreviousTotalValue(currentTotalValue);
+      setCurrentTotalValue(totalValue);
+    } catch (error) {
+      console.error('Error making transaction:', error);
+    }
   };
 
   const handleSort = (criteria) => {
@@ -55,6 +83,14 @@ function StockGame({ player }) {
   };
 
   const growth = ((currentTotalValue - previousTotalValue) / (previousTotalValue || 1)) * 100;
+
+  if (!gameStarted) {
+    return (
+      <div className="container-fluid vh-100 d-flex justify-content-center align-items-center">
+        <h1>Waiting for the game to start...</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="container-fluid vh-100 d-flex flex-column">
@@ -78,6 +114,6 @@ function StockGame({ player }) {
       </div>
     </div>
   );
-}
+};
 
 export default StockGame;
