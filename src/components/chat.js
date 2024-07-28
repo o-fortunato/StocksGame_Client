@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
+//import * as WebSocketFunc from '../webSocket';
 
 const ChatWindow = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
 
+    let Test_Send = JSON.stringify({
+        //See PDF for list of events
+        "event": "send-message",
+        "data": {
+            "senderId": "a6cd5f0d-a0bc-4ad2-82ad-1133b9ea7a44",
+            "receiverId": "all",
+            "message": `${input}`
+        }, //For now, change as needed
+    })
+
     const handleSend = () => {
         if (input.trim()) {
             setMessages([...messages, input]);
             setInput('');
+            //WebSocketFunc.webSocket.send(Test_Send)
         }
     };
 
