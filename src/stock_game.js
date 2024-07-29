@@ -56,7 +56,7 @@ const StockGame = ({ player }) => {
           type: type
         })
       });
-
+      console.log('Transaction sent');
       const data = await response.json();
       setCurrentBalance(data.currentBalance);
       setStocks(data.stocks);
